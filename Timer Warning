@@ -1,0 +1,22 @@
+Sub IdleTimeDetected(ExpiredMinutes)
+
+    '-rcg 07/25/12
+
+    '-start kill process
+
+    'Dim Msg As String
+
+    'Msg = "No user activity detected in the last "
+
+    'Msg = Msg & ExpiredMinutes & " minute(s)!"
+
+    'MsgBox Msg, 48
+
+    
+
+    DoCmd.OpenForm "frm_ExitNonUse"
+
+        
+
+End Sub
+
