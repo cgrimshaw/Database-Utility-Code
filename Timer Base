@@ -1,0 +1,109 @@
+Private Sub Form_Timer()
+
+    '-check for activity
+
+    'IDLEMINUTES determines how much idle time to wait for before
+
+        ' running the IdleTimeDetected subroutine.
+
+        Const IDLEMINUTES = 60
+
+
+        Static PrevControlName As String
+
+        Static PrevFormName As String
+
+        Static ExpiredTime
+
+ 
+
+        Dim ActiveFormName As String
+
+        Dim ActiveControlName As String
+
+        Dim ExpiredMinutes
+
+ 
+
+        On Error Resume Next
+
+ 
+
+        ' Get the active form and control name.
+
+ 
+
+        ActiveFormName = Screen.ActiveForm.Name
+
+        If Err Then
+
+           ActiveFormName = "No Active Form"
+
+           Err = 0
+
+        End If
+
+ 
+
+        ActiveControlName = Screen.ActiveControl.Name
+
+           If Err Then
+
+           ActiveControlName = "No Active Control"
+
+           Err = 0
+
+        End If
+
+ 
+
+        ' Record the current active names and reset ExpiredTime if:
+
+        '    1. They have not been recorded yet (code is running
+
+        '       for the first time).
+
+        '    2. The previous names are different than the current ones
+
+        '       (the user has done something different during the timer
+
+        '        interval).
+
+        If (PrevControlName = "") Or (PrevFormName = "") Or (ActiveFormName <> PrevFormName) Or (ActiveControlName <> PrevControlName) Then
+
+           PrevControlName = ActiveControlName
+
+           PrevFormName = ActiveFormName
+
+           ExpiredTime = 0
+
+        Else
+
+           ' ...otherwise the user was idle during the time interval, so
+
+           ' increment the total expired time.
+
+           ExpiredTime = ExpiredTime + Me.TimerInterval
+
+        End If
+
+ 
+
+        ' Does the total expired time exceed the IDLEMINUTES?
+
+        ExpiredMinutes = (ExpiredTime / 1000) / 60
+
+        If ExpiredMinutes >= IDLEMINUTES Then
+
+           ' ...if so, then reset the expired time to zero...
+
+           ExpiredTime = 0
+
+           ' ...and call the IdleTimeDetected subroutine.
+
+           IdleTimeDetected ExpiredMinutes
+
+        End If
+
+
+End Sub
